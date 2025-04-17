@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+
 @Entity
 @Table(name = "expense")
 @Data
@@ -30,9 +31,4 @@ public class Expense {
 
     @Column(nullable = false)
     private LocalDate exp_created;
-
-    private String exp_note;
-    private String exp_tag;
-
-    // Getters and Setters
 }

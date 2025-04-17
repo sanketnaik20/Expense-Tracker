@@ -1,8 +1,8 @@
 package com.expense_tracker.Controllers;
 
 import com.expense_tracker.Entity.UserInfo;
-import com.expense_tracker.Repositories.UserInfoRepository;
-import org.springframework.http.HttpStatus;
+import com.expense_tracker.Services.UserInfoServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,23 +12,40 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserInfoController {
 
-    private final UserInfoRepository userInfoRepository;
+    private final UserInfoServices userInfoServices;
 
-    public UserInfoController(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
+    @Autowired
+    public UserInfoController(UserInfoServices userInfoServices) {
+        this.userInfoServices = userInfoServices;
     }
 
-    // Endpoint to add a user
+    // Create user
     @PostMapping("/add")
     public ResponseEntity<UserInfo> addUser(@RequestBody UserInfo userInfo) {
-        UserInfo savedUser = userInfoRepository.save(userInfo);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return userInfoServices.addUser(userInfo);
     }
 
-    // Endpoint to get all users
+    // Get all users
     @GetMapping("/")
     public ResponseEntity<List<UserInfo>> getAllUsers() {
-        List<UserInfo> users = userInfoRepository.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return userInfoServices.getAllUsers();
+    }
+
+    // Get user by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<UserInfo> getUserById(@PathVariable("id") Long id) {
+        return userInfoServices.getUserById(id);
+    }
+
+    // Update user
+    @PutMapping("/{id}")
+    public ResponseEntity<UserInfo> updateUser(@PathVariable("id") Long id, @RequestBody UserInfo userInfo) {
+        return userInfoServices.updateUser(id, userInfo);
+    }
+
+    // Delete user
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        return userInfoServices.deleteUser(id);
     }
 }
